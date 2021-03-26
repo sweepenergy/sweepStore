@@ -16,59 +16,58 @@
 
 
 
-
+//console.time()
 const path = require('path')
-const dbPath = path.resolve(__dirname, './dummyData/LEVX.csv')
-//const sqlite3 = require('sqlite3').verbose();
+const dbPath = path.resolve(__dirname, './dummyData/test.csv')
+const parser = require('csv-parse');
+const fs = require('fs');
+const { delimiter } = require('path');
+const csvData = [];
+
+fs.createReadStream(dbPath)
+    .pipe(parser({
+        columns: true
+    }))
+    .on('data', function(data) {
+        csvData.push(data);
+    })
+    .on('end', function() {
+        console.log("Length of CSV: ", csvData.length);
+        console.log(csvData);
+    });
+
+//console.timeEnd()
 
 
-// let db = new sqlite3.Database(dbPath, (err) => {
-//     if (err) {
-//       return console.error(err.message);
-//     }
-//     console.log('Connected to the in-memory SQlite database.');
+
+// var fs = require('fs');
+//var csv = require('csv')
+// var parse = require('csv-parse');
+
+// var data = fs.createReadStream(dbPath);
+//This should be creating an object literal where: parser = {colName 1 = {data}, ..., colName N = {data}}
+// var parser = parse({columns: true}, function (err, records) {
+// 	console.log(records);
 // });
 
-//Since CSV files don't have table schemas this doesn't work
-// let sql = `SELECT *
-//             FROM test`;
+// var result = fs.createReadWriteStream(dbPath).pipe(parser);
 
-// db.all(sql, [], (err, rows) => {
-//     if (err) {
-//       throw err;
+// var columnResults = {};
+
+// console.log("result Length: ", result);
+// for(var row = 0; row < parser.length; row++) {
+//     console.log("1");
+//     for(var col in parser[row]) {
+//         if(!columnparsers[col]) {
+//             console.log("2");
+//             columnparsers[col] = [];
+//         }
+//         console.log("3");
+//         columnResults[col].push(parser[row][col]); 
 //     }
-//     rows.forEach((row) => {
-//       console.log(row.name);
-//     });
-//   });
+// }
 
-// db.close((err) => {
-//     if (err) {
-//         return console.error(err.message);
-//     }
-//     console.log('Close the database connection.');
-// });
+// console.log("Number of columns:", Object.keys(columnResults).length);
+// console.log("Column names:", Object.keys(columnResults));
+// console.log("Column data:", columnResults);
 
-var fs = require('fs'); 
-var parse = require('csv-parse');
-var parser = parse({columns: true}, function (err, records) {
-	console.log(records);
-});
-//fs.createReadStream(dbPath).pipe(parser);
-
-var p = parse(dbPath, {columns: true}); 
-
-var columnResults = {};
-
-for(var row = 0; row < p.length; row++) {
-    for(var col in p[row]) {
-        if(!columnResults[col]) {
-            columnResults[col] = [];
-        }
-        columnResults[col].push(p[row][col]); 
-    }
-}
-
-console.log("Number of columns:", Object.keys(columnResults).length);
-console.log("Column names:", Object.keys(columnResults));
-console.log("Column data:", columnResults);
