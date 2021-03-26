@@ -15,59 +15,70 @@
 */
 
 
-
-//console.time()
 const path = require('path')
-const dbPath = path.resolve(__dirname, './dummyData/test.csv')
+const csvPath = path.resolve(__dirname, './dummyData/test.csv')
 const parser = require('csv-parse');
 const fs = require('fs');
-const { delimiter } = require('path');
-const csvData = [];
+const Papa = require('papaparse');
 
-fs.createReadStream(dbPath)
-    .pipe(parser({
-        columns: true
-    }))
-    .on('data', function(data) {
-        csvData.push(data);
-    })
-    .on('end', function() {
-        console.log("Length of CSV: ", csvData.length);
-        console.log(csvData);
+const readCSV = async (csvFilePath) => {
+    const csvFile = fs.readFileSync(csvFilePath)
+    const csvData = csvFile.toString()  
+    return new Promise(resolve => {
+        Papa.parse(csvData, {
+        header: true,
+        complete: results => {
+            console.log('Complete', results.data.length, 'records.'); 
+            resolve(results.data); 
+            //console.log(results); 
+
+            let columnNames = results.meta.fields; 
+            // console.log(columnNames); 
+            
+            //Array of JSONs 
+            let dataCSV = results.data; 
+            //console.log(dataCSV[0]); 
+            
+            //Size of dataCSV (Number of jsons/elements the array has has)
+            let totSize = dataCSV.length;
+            //console.log(totSize);
+            //Size of an individual json 
+            let jsonSize = Object.keys(dataCSV[0]).length;
+            //console.log(jsonSize); 
+            
+            var val = []; 
+            let tempJson;
+            for(let i = 0; i < columnNames.length; i++) {
+                let colValues = [];
+                colValues.push(columnNames[i]);
+                for(let j = 0; j < totSize; j++) {
+                    tempJson = dataCSV[j]; 
+                    for (const [key, value] of Object.entries(tempJson)) {
+                        if(key == columnNames[i]) {
+                            colValues.push(tempJson[key]);
+                        }
+                        //console.log(key, value);
+                        //console.log(tempJson[key]);   
+                    }
+                }
+                val.push(colValues);
+            }
+            console.log(val); 
+
+            // let firstCol = ['name']; 
+            // for(let i = 0; i < totSize; i++) {
+            //     firstCol.push(dataCSV[i].name); 
+            // }
+
+            // console.log(firstCol)
+        }
+        });
     });
+}; 
 
-//console.timeEnd()
+const test = async () => {
+    var data = await readCSV(csvPath);
+    //console.log("Data: \n", data);
+}
 
-
-
-// var fs = require('fs');
-//var csv = require('csv')
-// var parse = require('csv-parse');
-
-// var data = fs.createReadStream(dbPath);
-//This should be creating an object literal where: parser = {colName 1 = {data}, ..., colName N = {data}}
-// var parser = parse({columns: true}, function (err, records) {
-// 	console.log(records);
-// });
-
-// var result = fs.createReadWriteStream(dbPath).pipe(parser);
-
-// var columnResults = {};
-
-// console.log("result Length: ", result);
-// for(var row = 0; row < parser.length; row++) {
-//     console.log("1");
-//     for(var col in parser[row]) {
-//         if(!columnparsers[col]) {
-//             console.log("2");
-//             columnparsers[col] = [];
-//         }
-//         console.log("3");
-//         columnResults[col].push(parser[row][col]); 
-//     }
-// }
-
-// console.log("Number of columns:", Object.keys(columnResults).length);
-// console.log("Column names:", Object.keys(columnResults));
-// console.log("Column data:", columnResults);
-
+test() 
