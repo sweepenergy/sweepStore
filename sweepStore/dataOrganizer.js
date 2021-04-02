@@ -15,36 +15,34 @@
 */
 
 
-const path = require('path')
+const path = require('path');
 const csvPath = path.resolve(__dirname, './dummyData/test.csv')
-const parser = require('csv-parse');
+
 const fs = require('fs');
 const Papa = require('papaparse');
+const fastcsv = require('fast-csv');
+const ws = fs.createWriteStream("data.csv");
 
-const readCSV = async (csvFilePath) => {
+async function parse(csvFilePath) {
     const csvFile = fs.readFileSync(csvFilePath)
     const csvData = csvFile.toString()  
     return new Promise(resolve => {
         Papa.parse(csvData, {
         header: true,
+        dynamicTyping: true,
         complete: results => {
             console.log('Complete', results.data.length, 'records.'); 
-            resolve(results.data); 
-            //console.log(results); 
 
             let columnNames = results.meta.fields; 
-            // console.log(columnNames); 
             
             //Array of JSONs 
             let dataCSV = results.data; 
-            //console.log(dataCSV[0]); 
             
             //Size of dataCSV (Number of jsons/elements the array has has)
             let totSize = dataCSV.length;
-            //console.log(totSize);
+            
             //Size of an individual json 
             let jsonSize = Object.keys(dataCSV[0]).length;
-            //console.log(jsonSize); 
             
             var val = []; 
             let tempJson;
@@ -52,33 +50,30 @@ const readCSV = async (csvFilePath) => {
                 let colValues = [];
                 colValues.push(columnNames[i]);
                 for(let j = 0; j < totSize; j++) {
-                    tempJson = dataCSV[j]; 
+                    tempJson = dataCSV[j];
                     for (const [key, value] of Object.entries(tempJson)) {
                         if(key == columnNames[i]) {
-                            colValues.push(tempJson[key]);
+                            colValues.push(value);
                         }
-                        //console.log(key, value);
-                        //console.log(tempJson[key]);   
                     }
                 }
                 val.push(colValues);
             }
-            console.log(val); 
-
-            // let firstCol = ['name']; 
-            // for(let i = 0; i < totSize; i++) {
-            //     firstCol.push(dataCSV[i].name); 
-            // }
-
-            // console.log(firstCol)
+            resolve(val);
         }
         });
     });
-}; 
-
-const test = async () => {
-    var data = await readCSV(csvPath);
-    //console.log("Data: \n", data);
 }
 
-test() 
+async function dataOrg() {
+    //Esstenially we currently have the tranpose of the dataset
+    var data = await parse(csvPath);
+
+    fastcsv
+    .write(data, { headers: true })
+    .pipe(ws);
+    console.log(data);
+}
+
+//allows us to export the function as a module to be used by other files
+module.exports = {dataOrg, parse};
