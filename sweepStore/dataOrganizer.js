@@ -21,7 +21,7 @@ const csvPath = path.resolve(__dirname, './dummyData/test.csv')
 const fs = require('fs');
 const Papa = require('papaparse');
 const fastcsv = require('fast-csv');
-const ws = fs.createWriteStream("data.csv");
+// const writer = fs.createWriteStream("./dummydata/data.csv");
 
 async function parse(csvFilePath) {
     const csvFile = fs.readFileSync(csvFilePath)
@@ -37,7 +37,7 @@ async function parse(csvFilePath) {
             
             //Array of JSONs 
             let dataCSV = results.data; 
-            
+            resolve(dataCSV);
             //Size of dataCSV (Number of jsons/elements the array has has)
             let totSize = dataCSV.length;
             
@@ -59,7 +59,7 @@ async function parse(csvFilePath) {
                 }
                 val.push(colValues);
             }
-            resolve(val);
+            //resolve(val);
         }
         });
     });
@@ -68,12 +68,18 @@ async function parse(csvFilePath) {
 async function dataOrg() {
     //Esstenially we currently have the tranpose of the dataset
     var data = await parse(csvPath);
-
-    fastcsv
-    .write(data, { headers: true })
-    .pipe(ws);
     console.log(data);
+    // data.foreach(element){
+    //     dict[element] = json_decode(json_encode($a));
+    // }
+    //Lets us write to a file defined by ws
+    // fastcsv
+    //     .write(data, { headers: true })
+    //     .pipe(writer);
+    // console.log(data);
 }
+
+dataOrg();
 
 //allows us to export the function as a module to be used by other files
 module.exports = {dataOrg, parse};
