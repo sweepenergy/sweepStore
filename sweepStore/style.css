@@ -111,3 +111,17 @@ html {
     background: #d4d4d4;
   }
    
+  .container {
+    padding: 10%;
+
+  }
+  
+
+  input[type=text], input[type=password] {
+    width: 75%;
+    padding: 12px 20px;
+    margin: 10px 0;
+    display: inline-block;
+    border: 1px solid rgb(0, 0, 0);
+    box-sizing: border-box;
+  }
