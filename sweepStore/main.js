@@ -11,7 +11,7 @@ app.on('ready', function(){
     mainWindow = new BrowserWindow({});
     //Load html 
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
+        pathname: path.join(__dirname, 'dropzone/index.html'),
         protocol: 'file',
         slashes: true
     })); //The above passes: file://dirname/mainWindow.html
