@@ -21,13 +21,14 @@ const csvPath = path.resolve(__dirname, './dummyData/test.csv')
 const fs = require('fs');
 const Papa = require('papaparse');
 const fastcsv = require('fast-csv');
-// const writer = fs.createWriteStream("./dummydata/data.csv");
+const writer = fs.createWriteStream("./dummydata/data.csv");
 
 async function parse(csvFilePath) {
-    const csvFile = fs.readFileSync(csvFilePath)
+    const csvFile = fs.readFileSync(csvFilePath) //check if this lets you read in chunks
     const csvData = csvFile.toString()  
     return new Promise(resolve => {
         Papa.parse(csvData, {
+        //check to import in chunks
         header: true,
         dynamicTyping: true,
         complete: results => {
@@ -44,6 +45,7 @@ async function parse(csvFilePath) {
             //Size of an individual json 
             let jsonSize = Object.keys(dataCSV[0]).length;
             
+            // Here we can break the JSON object into an array
             var val = []; 
             let tempJson;
             for(let i = 0; i < columnNames.length; i++) {
@@ -66,13 +68,15 @@ async function parse(csvFilePath) {
 }
 
 async function dataOrg() {
-    //Esstenially we currently have the tranpose of the dataset
+    //We currently have the tranpose of the dataset
     var data = await parse(csvPath);
     console.log(data);
+
     // data.foreach(element){
     //     dict[element] = json_decode(json_encode($a));
     // }
-    //Lets us write to a file defined by ws
+
+    // Lets us write to a file defined by ws
     // fastcsv
     //     .write(data, { headers: true })
     //     .pipe(writer);
