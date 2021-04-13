@@ -23,20 +23,57 @@ const Papa = require('papaparse');
 const fastcsv = require('fast-csv');
 //const writer = fs.createWriteStream("./dummydata/data.csv");
 
-async function parse(csvFilePath) {
+async function parse(csvFilePath, columnFields) {
     //const csvFile = fs.readFileSync(csvFilePath)
     //const csvData = csvFile.toString() 
-    const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1000}); 
+    const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1024}); 
      
     Papa.parse(fileStream, {
         header: true,
         dynamicTyping: true,
-        //chunkSize: fileStream.readableHighWaterMark/100,
-        //chunkSize: 1000,
         chunk: function(results, parse) {
-            console.log("Chunk data:", results.data);
-            //console.log("chunkSize:", this.chunkSize); 
-            //console.log(fileStream.readableHighWaterMark); 
+            //results.data is an array
+            console.log("Chunk data:", results.data); 
+            //console.log(fileStream.readableHighWaterMark);
+
+            for (let i in results.data) {
+                let data = results.data[i];
+                //console.log("data: ", data);
+                for (let key in data) {
+                    //console.log("Result Key: ", key);
+                    for (let col in columnFields) { 
+                        //console.log("Col Key: ", col);  
+                        if (col == key) {
+                            /*
+                            When the the keys match then we can initiate a post request with the correct type
+                                i.e. dir, stream, ts_param
+                            */
+                           field = columnFields[col];
+                           switch(field) {
+                               case "Dir":
+                                   /*
+                                   We need to check if the directory already exist
+                                        if so, do nothing and move? into the correct directory
+                                   */
+                                   console.log("Post a directory!");
+                                   break;
+                                case "Stream":
+                                    /*
+                                    Post to the correct directory
+                                    */ 
+                                    console.log("Post a stream!");
+                                    break;
+                                case "Ts_Param":
+                                      /*
+                                    Post to the correct stream?
+                                    */ 
+                                    console.log("Post a ts_param!");
+                                    break;
+                           }
+                        }
+                    }
+                }
+            }
             console.log("--------------Chunk end---------------"); 
         },
         complete: results => {
@@ -93,9 +130,11 @@ function test(csvFilePath) {
 }
 
 
-async function dataOrg() {
-    //Esstenially we currently have the tranpose of the dataset
-    var data = await parse(csvPath);
+async function dataOrg(columnFields) {
+
+    var data = await parse(csvPath, columnFields);
+
+
     //console.log(data);
     // data.foreach(element){
     //     dict[element] = json_decode(json_encode($a));
@@ -107,8 +146,28 @@ async function dataOrg() {
     //console.log(data);
 }
 
-dataOrg();
-//test(csvPath); 
+// columnFields = {index : "Dir",
+//                 word : "Stream",
+//                 type : "Ts_Param"};
+
+columnFields = {name : "Dir",
+                mfr : "Stream",
+                type : "Ts_Param",
+                calories : "Ts_Param",
+                protein : "Ts_Param",
+                fat : "Ts_Param",
+                sodium : "Stream",
+                fiber : "Stream",
+                carbo : "Stream",
+                sugars : "Stream",
+                potass : "Ts_Param",
+                vitamins : "Ts_Param",
+                shelf : "Stream",
+                weight : "Stream",
+                cups : "Ts_Param",
+                rating : "Stream"};
+
+dataOrg(columnFields); 
 
 //allows us to export the function as a module to be used by other files
 module.exports = {dataOrg, parse};
