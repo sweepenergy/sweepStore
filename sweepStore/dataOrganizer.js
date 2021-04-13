@@ -23,6 +23,27 @@ const Papa = require('papaparse');
 const fastcsv = require('fast-csv');
 const writer = fs.createWriteStream("./dummydata/data.csv");
 
+/*
+As information is being streamed through the server connection we can perform checks on the key values of the JSON object
+to determine how the data will be posted
+*/
+function test(csvFilePath) {
+    const csvData = fs.createReadStream(csvFilePath, {highWaterMark: 16});
+
+    var data=[];
+    Papa.parse(csvData, {
+      header: true,
+      dynamicTyping: true,
+      step: function(result) {
+        data.push(result.data)
+        console.log("result: ", result.data);
+      },
+      complete: function(results, file) {
+        console.log('Complete', data.length, 'records.'); 
+      }
+    });
+}
+
 async function parse(csvFilePath) {
     const csvFile = fs.readFileSync(csvFilePath) //check if this lets you read in chunks
     const csvData = csvFile.toString()  
@@ -67,10 +88,10 @@ async function parse(csvFilePath) {
     });
 }
 
-async function dataOrg() {
+function dataOrg() {
     //We currently have the tranpose of the dataset
-    var data = await parse(csvPath);
-    console.log(data);
+    var data = test(csvPath);
+    //console.log(data);
 
     // data.foreach(element){
     //     dict[element] = json_decode(json_encode($a));
