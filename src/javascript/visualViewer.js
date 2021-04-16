@@ -63,7 +63,7 @@ function showSweepFormat(data)
 
 
   // will add header with attribute names for the user to know what they aer changing
-  var table = '<table>';  
+  var table = '<table id="SelectionTable">';  
 
   table += '<thead>';
   table += '<tr>';
@@ -103,10 +103,30 @@ function showSweepFormat(data)
        table += '</table>';
        $('.columnMiddle').append(table);
 
+} 
+
+function passToDataOrg()
+{ 
+  var table = document.getElementById("SelectionTable");
+  var columnFields = {};
+  //iterate through the column field selection table
+  for (var r = 0; r < 1; r++) {
+      for (var c = 0; c < table.rows[r].cells.length; c++) {
+          var key = table.rows[r].cells[c].innerHTML;
+          var adjustedcurrentColumnName= "#" +  key + " option:selected";
+          var value = $(adjustedcurrentColumnName).text();
+
+          //insert the key and value to the dictionary "columnFields"
+          columnFields[key]=value; 
+      }
+  }
+
+  console.log(columnFields);
 }
 
-function editFormat()
-{
 
-}
+  
+
+
+
 
