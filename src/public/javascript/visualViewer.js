@@ -1,7 +1,7 @@
 function readFile()
 {
   $.ajax({
-    url: 'dummyData/testing.csv',
+    url: 'src/public/datasets/cereal.csv',
     dataType: 'text',
   }).done(showInitialFormat,showSweepFormat);
 }
