@@ -12,10 +12,10 @@ app.get('/', (req,res) => {
 
 app.post('/', function(req, res) {
     //res.end(JSON.stringify(req.body));
-    res.redirect('/home');
+    res.redirect('/upload');
 });
 
-app.get('/home', (req, res) => {
+app.get('/upload', (req, res) => {
   res.sendFile('index.html', { root: __dirname + '/public/pages/dropzone' });
 });
 

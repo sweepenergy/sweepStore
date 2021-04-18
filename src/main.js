@@ -34,8 +34,8 @@ function createWindow() {
     },
   });
 
-  //mainWindow.loadURL("http://localhost:3000");
-  mainWindow.loadFile('src/pages/dropzone/index.html'); 
+  mainWindow.loadURL("http://localhost:3000");
+  //mainWindow.loadFile('src/pages/dropzone/index.html'); 
   mainWindow.on("closed", function () {
     mainWindow = null;
   });
