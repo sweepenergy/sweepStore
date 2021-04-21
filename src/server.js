@@ -21,17 +21,11 @@ app.get('/upload', (req, res) => {
   res.sendFile('upload.html', { root: __dirname + '/public/pages' });
 });
 
-app.post('/upload', upload.single('file'), (req, res) => {
-  //console.log("Original file name: ", req.file.originalname);
-  //console.log("Generated name: ", req.file.filename); 
+app.post('/upload', upload.single('file'), (req, res) => { 
   const parse = require('./public/javascript/testDataOrg'); 
   parse.uploadParse(req.file.filename); 
-  //res.redirect('/import'); 
-  return res.status(200).send(req.file); 
 })
 
-
-/*
 app.get('/import', (req, res) => {
   res.sendFile('import.html', { root: __dirname + '/public/pages' });
 });
@@ -39,7 +33,7 @@ app.get('/import', (req, res) => {
 app.post('/import', (req, res) => {
   //const importt = require('./public/pages/visualViewer'); 
   //importt.readFile(req.file.filename); 
-}); */ 
+});
 
 
 app.listen(process.env.port || 3000);
