@@ -18,7 +18,7 @@ app.post('/', function(req, res) {
 });
 
 app.get('/upload', (req, res) => {
-  res.sendFile('index.html', { root: __dirname + '/public/pages/dropzone' });
+  res.sendFile('upload.html', { root: __dirname + '/public/pages' });
 });
 
 app.post('/upload', upload.single('file'), (req, res) => {
