@@ -26,18 +26,19 @@ app.post('/upload', upload.single('file'), (req, res) => {
   //console.log("Generated name: ", req.file.filename); 
   const parse = require('./public/javascript/testDataOrg'); 
   parse.uploadParse(req.file.filename); 
-  res.redirect('/import'); 
+  //res.redirect('/import'); 
   return res.status(200).send(req.file); 
 })
 
-/* Not working yet 
+
+/*
 app.get('/import', (req, res) => {
   res.sendFile('import.html', { root: __dirname + '/public/pages' });
 });
 
 app.post('/import', (req, res) => {
-  const importt = require('./public/pages/visualViewer'); 
-  importt.readFile(req.file.filename); 
+  //const importt = require('./public/pages/visualViewer'); 
+  //importt.readFile(req.file.filename); 
 }); */ 
 
 
