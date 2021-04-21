@@ -4,6 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+//dropzone
+/*var multer = require("multer");
+var upload = multer({ dest: 'uploads/' } );
+var exphbs = require('express-handlebars');*/
+//
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
@@ -37,5 +43,24 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// upload handler
+/* app.use(express.static(__dirname +'/public'));
+
+app.engine('.hbs', exphbs({ extname:'.hbs'}));
+app.set('view engine','.hbs');
+
+app.get('/', (req, res) => {
+  return res.render('index', {layout: false});
+});
+
+app.post('/upload', upload.single('file'), (req, res) => {
+    console.log(req.file);
+    return res.status(200).send(req.file);
+});
+
+app.listen(3000, "0.0.0.0", function(){
+   console.log("Dropzone started."); 
+}); */
 
 module.exports = app;
