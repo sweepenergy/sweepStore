@@ -1,10 +1,12 @@
-var mysql2 = require('mysql2');
+var mysql = require('mysql2');
 var express = require('express');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var path = require('path');
+const multer = require('multer');
+const upload = multer({ dest:'src/public/datasets'});
 
-var connection = mysql2.createConnection({
+var connection = mysql.createConnection({
 	//host     : 'localhost',
 	host  : "127.0.0.1",
 	port     : "3306",
@@ -51,8 +53,19 @@ app.post('/auth', function(request, response) {
 });
 
 app.get('/upload', function(request, response) {
-    response.sendFile('upload.html', { root: __dirname + '/public/pages' });
-  });
+	//if (request.session.loggedin) {
+    	response.sendFile('upload.html', { root: __dirname + '/public/pages' });
+		//response.send('Welcome back, ' + request.session.username + '!');
+	//} else {
+		//response.send('Please login to view this page!');
+	//}
+	//response.end();
+});
+app.post('/upload', upload.single('file'), function(request, response) { 
+	const parse = require('./public/javascript/testDataOrg'); 
+	parse.uploadParse(request.file.filename);
+	return response.status(200).send(request.file);
+  })
 /*app.get('/home', function(request, response) {
 	if (request.session.loggedin) {
 		response.send('Welcome back, ' + request.session.username + '!');
@@ -66,10 +79,10 @@ app.get('/upload', function(request, response) {
 
 connection.connect((err) => {
 	if(err){
-	  console.log('Error connecting to Db');
+	  console.log('Error connecting to DB');
 	  return;
 	}
-	console.log('Connection established');
+	console.log('Connection established to DB');
   });
 
   /*connection.end((err) => {
