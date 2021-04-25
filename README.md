@@ -1,5 +1,5 @@
 # Sweep Store
-
+***PLANNED PRODUCT DESCRIPTION***
 ## How to test?
 1. Clone the repository using
 2. Install the dependencies using: ***npm i*** or ***npm install***
