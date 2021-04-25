@@ -1,24 +1,3 @@
-/*const electron =  require('electron');
-const url = require('url');
-const path = require('path');
-
-const{app, BrowserWindow} = electron;
-
-let mainWindow;
-
-app.on('ready', function(){
-    //Create a new window
-    mainWindow = new BrowserWindow({});
-    //Load html 
-    mainWindow.loadURL(url.format({
-        //pathname: path.join(__dirname, '/src/pages/dropzone/index.html'),
-        pathname: path.join(__dirname, 'ex.html'),
-        protocol: 'file',
-        slashes: true
-    })); //The above passes: file://dirname/mainWindow.html
-})  */
-
-
 const { app, BrowserWindow } = require("electron");
 
 const server = require("./server");
@@ -35,7 +14,7 @@ function createWindow() {
   });
 
   mainWindow.loadURL("http://localhost:3000");
-  //mainWindow.loadFile('src/public/pages/import.html'); 
+  //mainWindow.loadFile('src/public/pages/import.html');
   mainWindow.on("closed", function () {
     mainWindow = null;
   });
