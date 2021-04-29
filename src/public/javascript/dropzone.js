@@ -193,7 +193,7 @@ function (_Emitter) {
          * How many file uploads to process in parallel (See the
          * Enqueuing file uploads documentation section for more info)
          */
-        parallelUploads: 2,
+        parallelUploads: 1,
 
         /**
          * Whether to send multiple files in one request. If
@@ -357,7 +357,7 @@ function (_Emitter) {
          * [`accept`](https://developer.mozilla.org/en-US/docs/HTML/Element/input#attr-accept)
          * parameter on the hidden file input as well.
          */
-        acceptedFiles: null,
+        acceptedFiles: '.csv',
 
         /**
          * **Deprecated!**
