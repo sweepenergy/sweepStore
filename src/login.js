@@ -17,6 +17,9 @@ var connection = mysql.createConnection({
 });
 
 var app = express();
+
+app.use("/", express.static(path.join(__dirname, 'public/')));
+
 app.use(session({
 	secret: "sweepStoreAdmin",
 	resave: true,
