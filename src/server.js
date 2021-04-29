@@ -23,6 +23,7 @@ app.get('/upload', (req, res) => {
 
 app.post('/upload', upload.single('file'), function(req, res) {
   console.log("File Uploaded");
+  res.redirect('/import');
   // const parse = require('./public/javascript/testDataOrg');
   // parse.uploadParse(req.file.filename);
 });
