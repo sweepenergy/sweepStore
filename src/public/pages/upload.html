@@ -29,16 +29,17 @@
     <script type="text/javascript" src="../javascript/dropzone.js"></script>
     <script type="text/javascript">
       Dropzone.options.myDropzone = {
-            paramName: 'file',
-            //acceptedFiles: ,
-            init: function() {
-                this.on('success', function( file, resp ){
-                  // console.log(file);
-                  // console.log(resp);
-                  window.location.pathname = "/import.html"
-            });
-          }
+        paramName: 'file',
+        init: function() {
+          this.on('success', function(file,resp){
+            window.location.pathname = "/import"
+          });
+
+          this.on('error', function(error){
+            console.log(error);
+          });
         }
+      }
     </script>
   </body>
 </html>
