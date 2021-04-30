@@ -2,6 +2,10 @@ html {
   box-sizing: border-box;
 }
 
+body{
+  background-color: white;
+}
+
 *, *:before, *:after {
   box-sizing: inherit;
 }
@@ -28,7 +32,10 @@ html {
   padding: 3% ;
   text-decoration: none;
   color: #fff;
-  color: rgba(255, 255, 255, .8);
+  color: rgba(255, 255, 255, 0.952);
+  font-size: 72px;
+  font-family: Arial, Helvetica, sans-serif;
+  
 }
 
 .button{
@@ -162,5 +169,29 @@ input[type=text], input[type=password] {
   display: inline-block;
   border: 1px solid rgb(0, 0, 0);
   box-sizing: border-box;
+
+}
+
+input[type=submit]{
+  color: white;
+  padding: 10px 15px;
+  background-color: #001648;
+  border: none;
+  align-items: center;
+  text-align: center;
+}
+
+/* use if we want the center the login button */
+/* .loginButton{
+  text-align: center;
+} */
+
+.LoginForm{
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.tableName{
+  text-align:justify;
 }
 
