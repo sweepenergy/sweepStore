@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>sweepStore upload</title>
+    <title>Upload</title>
     <link href="../stylesheets/dropzone.css" type="text/css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css">
     <meta name="csrf-token" content="XYZ123">
@@ -12,9 +12,23 @@
   </head>
   <body>
     <div class="container">
-      <header>
-        <h1 style="color:rgb(24, 57, 150);">sweepStore</h1>
-      </header>
+      <div>
+        <h1 style="color:#0183c1; font-size: 18px;">Upload and format your data</h1>
+      </div>
+
+      <!-- Add two columns to show how the process works -->
+      <div class="row">
+        <div class="column">
+          <img src="../images/organizeData.png" style="height: 150px; width: 150px; transform: rotateY(180deg);">
+          <h4>Organize your Data</h4>
+          <p>Design how you want to organize your data</p>
+        </div>
+        <div class="column">
+          <img src="../images/timeSeriesGraph.png" style="height: 150px; width: 200px;">
+          <h4>View your Data</h4>
+          <p>Use the SweepAPI service to view your newly formatted database with additional charts</p>
+        </div>
+      </div>
 
       <div>
         <form id="myDropzone" method="POST" action="/upload" class="dropzone"  enctype="multipart/form-data">

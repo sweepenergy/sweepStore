@@ -1,13 +1,42 @@
+
 body {
-    font-family: helvetica, arial, sans-serif;
-    padding: 6rem;
-  }
-  main {
-    max-width: 40rem;
-    margin: 0 auto;
-  }
-  .dropzone {
-    border: 4px dashed rgb(24, 57, 150);
-    color: rgb(0, 0, 0)
-  }
-  
+  font-family: helvetica, arial, sans-serif;
+  padding: 6rem;
+}
+main {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+.dropzone {
+  border: 4px dashed #183996;
+  color: rgb(0, 0, 0)
+}
+
+
+*{
+  box-sizing: border-box;
+}
+
+.banner{
+  margin-bottom: 30px;
+  text-align: center;
+  background-color: #001648;
+}
+
+.column{
+  float: left;
+  width: 50%;
+  padding: 10px;
+  text-align: center;
+}
+
+p{
+  font-size: 12px;
+}
+
+/* Clear floats after the columns */
+.row:after {
+content: "";
+display: table;
+clear: both;
+}
