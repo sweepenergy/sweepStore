@@ -1,13 +1,11 @@
 // const { dataOrg } = require("./dataOrganizer");
 
-function readFile()
-{
+function readFile(fname) {
   $.ajax({
-    url: '../../public/datasets/cereal.csv',
+    url: '../datasets/' + fname,
     dataType: 'text',
   }).done(showInitialFormat,showSweepFormat);
 }
-
 
 function showInitialFormat(data) {
   var allRows = data.split(/\r?\n|\r/);

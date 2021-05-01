@@ -27,8 +27,12 @@
   
   <div class="import">
     <div class="vertical-center">
+
+      <h3><%=fileName%></h3>
+      <input type="text" name="name" id="file">
+      <button onclick="readFile(document.getElementById('file').value)">Submit</button> 
       
-      <input type = "button" onclick = "readFile()" value = "Import">
+      <!--<input type = "button" onclick = "readFile()" value = "Import">-->
       <input type = "button" onclick = "passToDataOrg()" value = "Submit">
     </div>
   </div>
