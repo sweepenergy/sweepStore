@@ -3,8 +3,9 @@
 <head>
     <title>Format</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="shortcut icon" href="#"> <!-- Temporary solution to favicon.ico error -->
 </head>
-<body>
+<body onload="readFile()">
 
   <link rel="stylesheet" href="../stylesheets/style.css">
 
@@ -24,28 +25,13 @@
   <div class="options">
     <div class="columnMiddle"></div>
   </div>
-  
-  <div class="import">
-    <div class="vertical-center">
-
-      <h3><%=fileName%></h3>
-      <input type="text" name="name" id="file">
-      <button onclick="readFile(document.getElementById('file').value)">Submit</button> 
-      
-      <!--<input type = "button" onclick = "readFile()" value = "Import">-->
-      <input type = "button" onclick = "passToDataOrg()" value = "Submit">
-    </div>
-  </div>
-
-  
 
   <div class="progress">
 
   </div>
 
-
-  <script src="../javascript/dataOrganizer.js"></script>
+  <!-- <script src="../javascript/dataOrganizer.js"></script> -->
   <script src="../javascript/visualViewer.js"></script>
-  <script src="../javascript/passToDataOrg.js"></script>
+  <!-- <script src="../javascript/passToDataOrg.js"></script> -->
 </body>
 </html>
