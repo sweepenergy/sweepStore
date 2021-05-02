@@ -1,44 +1,53 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser')
 const path = require('path');
+
 const multer = require('multer');
-const upload = multer({ dest:'src/public/datasets'});
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './src/public/datasets')
+  },
+  filename: function (req, file, cb) {
+    cb(null, 'client_data.csv');
+  }
+})
+const upload = multer({ storage: storage });
 
 app.use("/", express.static(path.join(__dirname, 'public/')));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
+app.set('views', path.join(__dirname, '/public/pages'));
+app.set('view engine', 'ejs')
 app.engine('html', require('ejs').renderFile);
 
+/*
+==========================================================
+                        Routers
+==========================================================
+ */
+
 app.get('/', (req,res) => {
-  res.sendFile('login.html', { root: __dirname + '/public/pages/' });
+  res.render('login.html');
 });
 
 app.post('/', function(req, res) {
-    //res.end(JSON.stringify(req.body));
     res.redirect('/upload');
 });
 
 app.get('/upload', (req, res) => {
-  res.sendFile('upload.html', { root: __dirname + '/public/pages' });
+  res.render('upload.html');
 });
 
-var globalVar = ""; 
 app.post('/upload', upload.single('file'), function(req, res) {
-  console.log("File Uploaded");
-  globalVar = req.file.filename; 
   res.redirect('/import');
-  // const parse = require('./public/javascript/testDataOrg');
-  // parse.uploadParse(req.file.filename);
 }); 
 
 app.get('/import', (req, res) => {
-  //res.sendFile('import.html', { root: __dirname + '/public/pages' });
-  res.render(__dirname + "/public/pages/import.html", {fileName:globalVar}); 
+  res.render('import.html'); 
 });
 
-app.post('/import', (req, res) => {
-  
+app.get('/organize', (req, res) => {
+  res.render('mainWindow.html');
 });
 
 
