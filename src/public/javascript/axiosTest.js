@@ -1,14 +1,15 @@
 const axios = require('axios');
 const btoa = require('btoa'); 
         
-let key = "" /// user key from api_keys
-let token = "" // token from api_keys
+const key = "" /// user key from api_keys
+const token = "" // token from api_keys
 
 const auth = `Basic ${btoa(
     key + ":" + token
 )}`; 
 
 
+/*
 //Returns session id and session token. Different than API keys and tokens. Use facility ops login info
 //for some reason axios.post() doesn't work     
 axios("https://api.sweepapi.com/account/auth", {
@@ -31,8 +32,10 @@ axios("https://api.sweepapi.com/account/auth", {
 .catch(function (error) {
     console.log(error); 
 }); 
+*/ 
 
 
+/*
 //Authenticated with api key + token
 //Returns a list of API keys
 axios("https://api.sweepapi.com/account/auth/api_key", {
@@ -49,7 +52,7 @@ axios("https://api.sweepapi.com/account/auth/api_key", {
 .catch(function (error) {
     console.log(error); 
 });
-
+*/ 
 
 //API request to create a directory. Returns status ok and directory id if done successfully 
 axios("https://api.sweepapi.com/directory", {
@@ -64,9 +67,9 @@ axios("https://api.sweepapi.com/directory", {
 })
 .then(function (response) {
     //Return json
-    console.log("/directory res: ", response.data); 
-    //createStream(response.data["id"])
+    console.log("directory: ", response.data);  
     createSubDir(response.data["id"]); 
+    createStream(response.data["id"]);
 })
 .catch(function (error) {
     console.log(error); 
@@ -94,6 +97,55 @@ function createSubDir(directoryID) {
         console.log(error); 
     });
 } 
+
+
+function createStream(directoryID) {
+    config_req = {
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+            "Access-Control-Allow-Origin":"*"
+        }
+    }
+    data = {
+        "directory_id": directoryID,
+        "name": "test stream 23e2",
+        "inputDataVar": [
+            {
+                "var_name": "voltage_b",
+                "display_name": "Voltage b",
+                "description": "Voltage b amps",
+                "units": "volts",
+                "type": "number"
+            },
+            {
+                "var_name": "current_b",
+                "display_name": "Current b",
+                "description": "Current b amps",
+                "units": "amps",
+                "type": "number"
+            },
+            {
+                "var_name": "log_maintenance",
+                "display_name": "Maintenance Log",
+                "description": "Maintenance Log over time",
+                "units": "unitless",
+                "type": "text"
+            }
+        ]
+    }
+    axios.post("https://api.sweepapi.com/stream", data, config_req)
+    .then(function (response) {
+        //Return json
+        console.log("create stream: ", response.data); 
+    })
+    .catch(function (error) {
+        console.log(error); 
+    });
+}
 
 
 /*    
@@ -131,58 +183,6 @@ axios('https://api.sweepapi.com/platform/healthcheck', {
     console.log(error); 
 });
 */ 
-
-/*
-//Not working, for some reason the same authentication used to create a directory doesn't work here
-createStream(); 
-function createStream() {
-    //console.log(directoryID); 
-    axios.post("https://api.sweepapi.com/stream", {
-    header: {
-        'Content-Type' : 'application/json',
-    },
-    auth: {
-        Authorization: `Basic ${btoa(
-            key + ":" + token
-        )}`
-    },   
-    data: {
-        "directory_id": "{{b5fabdb8-3201-4795-a11f-8adda7dd07c2}}",
-        "name": "test stream 23e2",
-        "ts_param": [
-            {
-                "id": "voltage_b",
-                "display_name": "Voltage b",
-                "description": "Voltage b amps",
-                "units": "volts",
-                "type": "number"
-            },
-            {
-                "id": "current_b",
-                "display_name": "Current b",
-                "description": "Current b amps",
-                "units": "amps",
-                "type": "number"
-            },
-            {
-                "id": "log_maintenance",
-                "display_name": "Maintenance Log",
-                "description": "Maintenance Log over time",
-                "units": "unitless",
-                "type": "text"
-            }
-        ]
-    }
-    })
-    .then(function (response) {
-        //Return json
-        console.log(response.data); 
-    })
-    .catch(function (error) {
-        console.log(error); 
-    }); 
-}
-*/  
 
 
 /*
