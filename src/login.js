@@ -6,6 +6,7 @@ const upload = multer({ dest:'src/public/datasets'});
 
 const store = require("store2");
 const axios = require('axios');
+const btoa = require("btoa");
 
 var app = express();
 
@@ -19,48 +20,39 @@ app.get('/', function(request, response) {
     response.sendFile('login.html', { root: __dirname + '/public/pages/' });
 });
 
-
 app.post('/auth', function(request, response) {
-	var userkey = request.body.userkey;
-	var usertoken = request.body.usertoken;
+	//var userkey = '';
+	//var usertoken = '';
 
-	var getKey = store.get('key');
-	var getToken = store.get('token');
+	var userkey = 'e0eab27d-da5c-4a03-803e-b1330749e9cc';
+	var usertoken = '4b0a9751-d753-455f-a9ee-d12f5a65f808';
 
-	if(userkey && usertoken){
-		//check if key and token has already been saved
-		if (store.get('key') && store.get('token')!== null){
-			//check if the saved key and token match the inputted key and token
-			if (getKey == userkey && getToken == usertoken){
-				response.redirect('/upload');
-				console.log(response);
-			
-				}
-		//check if key and token is valid
+	const auth = `Basic ${btoa(
+		userkey + ":" + usertoken
+	)}`; 
+
+	axios("https://api.sweepapi.com/account/verify_auth", {
+		method: 'GET',
+		headers: {
+			'Content-Type' : 'application/json',
+			Authorization: auth,
+		}
+	})
+	.then(function (res) {
+		console.log("account/verify_auth res:", res.data);
+		var string = JSON.stringify(res.data);
+		
+		if (string !== '{"status":"ok"}') {
+			console.log("User is not authenticated. Try Again.");
+			response.redirect('/login');
 		} else {
-				//still doesn't work
-				axios({
-							method: "post",
-							url: 'https://api.sweepapi.com/account/auth',
-							headers: {
-								'Content-Type' : 'application/json',
-							},
-							data: JSON.stringify({
-								'email': userkey,
-								'password': usertoken,
-								}),
-				//once valid, save inputted key and token to storage
-				}).then(function (response) {
-							store.set('key', userkey);
-							store.set('token', usertoken);
-							response.redirect('/upload');
-							console.log(response);
-					});
-				}
-	} else {
-		console.log('User is not authenticated');
-		response.redirect('/login');
-	} 
+			console.log("User is authenticated!");
+			response.redirect('/upload');
+		}
+	})
+	.catch(function (error) {
+		console.log(error);
+	});
 });
 
 app.get('/upload', function(request, response) {
