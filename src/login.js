@@ -18,29 +18,9 @@ app.use(bodyParser.json());
 app.get('/', function(request, response) {
     response.sendFile('login.html', { root: __dirname + '/public/pages/' });
 });
-/*
-const asyncLocalStorage = {
-    setItem: async function (id,key) {
-        await null;
-        return als.set(key);
-    },
-	setItem: async function (id,token) {
-        await null;
-        return als.set(token);
-    },
-    getItem: async function (key) {
-        await null;
-        return als.get(key);
-    },
-	getItem: async function (token) {
-        await null;
-        return als.get(token);
-    }
-};
-*/
 
 
-app.post('/', function(request, response) {
+app.post('/auth', function(request, response) {
 	var userkey = request.body.userkey;
 	var usertoken = request.body.usertoken;
 
@@ -48,15 +28,16 @@ app.post('/', function(request, response) {
 	var getToken = store.get('token');
 
 	if(userkey && usertoken){
-		console.log("Check 1");
-		if (getKey == userkey && getToken == usertoken){
-			console.log("Check 2");
 		//check if key and token has already been saved
-			if (store.get('key') && store.get('token')!== null){
-					response.redirect('/upload');
-					console.log(response);
-			//check if key and token is valid
-			} else {
+		if (store.get('key') && store.get('token')!== null){
+			//check if the saved key and token match the inputted key and token
+			if (getKey == userkey && getToken == usertoken){
+				response.redirect('/upload');
+				console.log(response);
+			
+				}
+		//check if key and token is valid
+		} else {
 				//still doesn't work
 				axios({
 							method: "post",
@@ -65,21 +46,20 @@ app.post('/', function(request, response) {
 								'Content-Type' : 'application/json',
 							},
 							data: JSON.stringify({
-								'email': email,
-								'password': password,
+								'email': userkey,
+								'password': usertoken,
 								}),
+				//once valid, save inputted key and token to storage
 				}).then(function (response) {
 							store.set('key', userkey);
 							store.set('token', usertoken);
 							response.redirect('/upload');
 							console.log(response);
-						});
-					}
+					});
 				}
 	} else {
 		console.log('User is not authenticated');
 		response.redirect('/login');
-		
 	} 
 });
 
