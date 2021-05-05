@@ -21,38 +21,47 @@ app.get('/', function(request, response) {
 });
 
 app.post('/auth', function(request, response) {
-	//var userkey = '';
-	//var usertoken = '';
 
-	var userkey = 'e0eab27d-da5c-4a03-803e-b1330749e9cc';
-	var usertoken = '4b0a9751-d753-455f-a9ee-d12f5a65f808';
 
-	const auth = `Basic ${btoa(
-		userkey + ":" + usertoken
-	)}`; 
+		var userkey = request.body.userKey;
+		var usertoken = request.body.userToken;
 
-	axios("https://api.sweepapi.com/account/verify_auth", {
-		method: 'GET',
-		headers: {
-			'Content-Type' : 'application/json',
-			Authorization: auth,
-		}
-	})
-	.then(function (res) {
-		console.log("account/verify_auth res:", res.data);
-		var string = JSON.stringify(res.data);
-		
-		if (string !== '{"status":"ok"}') {
-			console.log("User is not authenticated. Try Again.");
-			response.redirect('/login');
-		} else {
-			console.log("User is authenticated!");
-			response.redirect('/upload');
-		}
-	})
-	.catch(function (error) {
-		console.log(error);
-	});
+		const auth = `Basic ${btoa(
+			userkey + ":" + usertoken
+		)}`; 
+	
+		console.log(userkey);
+		console.log(usertoken);
+
+		axios("https://api.sweepapi.com/account/verify_auth", {
+			method: 'GET',
+			headers: {
+				'Content-Type' : 'application/json',
+				'Authorization': 'Basic OWVhNmY4YmQtYWZmMy00YmYxLTllODgtZTE4NWE0OWYxYzVkOmM1ZTkwYmJjLTQ3YTgtNGQ5Ni05Y2E1LTk3MTM0Yzc4NmFmYw==',
+				 Authorization: auth,
+			}
+		})
+		.then(function (res) {
+			console.log("account/verify_auth res:", res.data);
+			var string = JSON.stringify(res.data);
+			
+			if (string !== '{"status":"ok"}') {
+				console.log("User is not authenticated. Try Again.");
+				response.redirect('/login');
+			} else {
+	
+				//Hash info before redirecting
+				console.log("User is authenticated!");
+				response.redirect('/upload');
+			}
+		})
+		.catch(function (error) {
+			console.log(error);
+		});
+
+
+
+	
 });
 
 app.get('/upload', function(request, response) {
@@ -73,3 +82,5 @@ app.get('/login', function(request, response) {
 app.listen(3000, () => {
     console.log('Express server listening on port 3000');
   });
+
+
