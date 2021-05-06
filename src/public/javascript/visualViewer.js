@@ -111,8 +111,6 @@ function showSweepFormat(data)
 
 function getValueForStream(){
   //get the value of the radio button to determine if the user has used a header as a stream
-  // const btn = document.querySelector('#btn');
-
   const rbs = document.querySelectorAll('input[name=\"choice\"]');
   let selectedValue;
   for(const rb of rbs){
@@ -125,18 +123,19 @@ function getValueForStream(){
   //create a text box for user to add the name for the stream
   if(selectedValue == "no"){
     var textBox = "<br><p>Type the name you would like to call your stream and press confirm.</p>";
-    textBox = textBox + "<input id =\"streamText\" placeholder=\"stream name\">";
+    textBox = textBox + "<form><input id=\"streamText\" placeholder=\"stream name\">";
+    textBox = textBox + "<input type=\"button\" id=\"stream-btn\" value=\"Add Stream\" onclick=\"setColumnTypes()\"></form>";
     $(".columnMiddle").append(textBox);
   }
   else {
-    passToDataOrg();
+    setColumnTypes();
   }
 }
 
-function passToDataOrg()
+function setColumnTypes()
 { 
   var table = document.getElementById("SelectionTable");
-  var columnFields = {};
+  var columnTypes = {};
 
   // will be keeping count of these 3 values to make sure that the user does not input more than 1, and if streams remains as 0 then we ask the user if we can put all the data into one stream.
   var dirCount = 0;
@@ -163,13 +162,9 @@ function passToDataOrg()
             timestampCount++;
           }
 
-          //insert the key and value to the dictionary "columnFields", if value is a stream 
-          if(value == "stream"){
-            streamName = key;
-          }else{
-            columnFields[key]=value; 
-          }
-          
+          //insert the key and value to the dictionary "columnTypes", if value is a stream 
+          columnTypes[key]=value; 
+    
       }
   }
 
@@ -189,11 +184,39 @@ function passToDataOrg()
   }else if(streamCount == 0){
     //get the name of the new stream from the id="streamText"
     streamName = document.getElementById("streamText").value;
-    ;
+    columnTypes.streamColumn = streamName;
   }
-  
-  console.log(columnFields);
-  console.log(streamName);
 
-  dataOrg(columnFields, streamName);
+  console.log(columnTypes);
+
+  if(columnTypes) {
+    // $.ajax({
+    //   url: "./datasets/saveColumnTypes.php",
+    //   method: "POST",
+    //   dataType: "json",
+    //   data: columnTypes,
+    //   success: function(response) {
+    //     alert(response);
+    //    },
+    // });
+    var xhr = new XMLHttpRequest();
+    var url = './datasets/saveColumnTypes.php';
+    var data = columnTypes;
+
+    xhr.onreadystatechange = function() {//Call a function when the state changes.
+      if(xhr.readyState == 4 && xhr.status == 200) {
+          alert(xhr.responseText);
+      }
+    }
+
+    xhr.open('POST', url, true);
+    xhr.responseType = 'json';
+    xhr.setRequestHeader('Content-Type', 'application/json'); 
+
+    xhr.send(data);
+
+    // $.post('./dataset/saveColumnTypes.php', columnTypes, function(response) {
+    //   console.log("Response: "+response);
+    // });
+  }
 }
