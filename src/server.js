@@ -23,7 +23,6 @@ const upload = multer({ storage: storage });
 const btoa = require("btoa");
 const axios = require('axios');
 
-app.set('trust proxy', 1);
 app.use("/", express.static(path.join(__dirname, 'public/')));
 app.use(express.urlencoded({ extended: false }));
 
@@ -47,11 +46,10 @@ client.on('error', function (err) {
   console.log('Something went wrong ' + err);
 });
 
+app.set('trust proxy', 1);
 app.set('views', path.join(__dirname, '/public/pages'));
 app.set('view engine', 'ejs')
 app.engine('html', require('ejs').renderFile);
-
-
 
 /*
 ==========================================================
@@ -76,14 +74,14 @@ app.post('/auth', function(req, res) {
 	var userkey = req.body.userkey;
 	var usertoken = req.body.usertoken;
 
-    const sess = req.session;
-
-    sess.userkey = userkey;
-    sess.usertoken = usertoken;
+  const sess = req.session;
 
 	const auth = `Basic ${btoa(
 		userkey + ":" + usertoken
 	)}`;
+
+  sess.userkey = userkey;
+  sess.usertoken = usertoken;
 
 	axios("https://api.sweepapi.com/account/verify_auth", {
 		method: 'GET',
@@ -126,6 +124,13 @@ app.post('/upload', upload.single('file'), function(req, res) {
 
 app.get('/import', (req, res) => {
   res.render('import.html'); 
+});
+
+app.post('/import', (req, res) => { 
+  //console.log("User specified column types: ", req.body);  
+
+  const test = require('./public/javascript/testDataOrg');
+  test.uploadParse(req.body); 
 });
 
 app.get('/organize', (req, res) => {
