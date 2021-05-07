@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <title>Login</title>
+    <link rel="shortcut icon" href="#"> <!-- Temporary solution to favicon.ico error -->
 
 </head>
 <body>
@@ -16,21 +18,23 @@
 
   <div class="container">
     <div class="row">
-      <form action="/auth" method="POST">
+      <form action="/" method="POST">
         <div class="LoginForm">
-
-            Key<br>
-            <input type="text" placeholder="Key" name="userKey" required>
-            <br>Token<br>
-            <input type="password" placeholder="Token" name="userToken" required>
-            
+            Admin Username<br>
+            <input type="text" placeholder="Username" name="username" required>
+            <br>Password<br>
+            <input type="password" placeholder="Password" name="password" required>
             <div class="loginButton">
               <input type="submit" value="LOGIN" title="Login">
             </div>  
+            
+
+            <!--<input id="login-btn" action="/" type="submit" class="button" value="Login"-->
         </div>
       </form>
     </div>
   </div>
+
 
 
 
