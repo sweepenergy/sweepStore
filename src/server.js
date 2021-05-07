@@ -46,6 +46,13 @@ app.get('/import', (req, res) => {
   res.render('import.html'); 
 });
 
+app.post('/import', (req, res) => { 
+  //console.log("User specified column types: ", req.body);  
+
+  const test = require('./public/javascript/testDataOrg');
+  test.uploadParse(req.body); 
+});
+
 app.get('/organize', (req, res) => {
   res.render('mainWindow.html');
 });

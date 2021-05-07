@@ -189,34 +189,12 @@ function setColumnTypes()
 
   console.log(columnTypes);
 
+  //sending the list of column types to the server
   if(columnTypes) {
-    // $.ajax({
-    //   url: "./datasets/saveColumnTypes.php",
-    //   method: "POST",
-    //   dataType: "json",
-    //   data: columnTypes,
-    //   success: function(response) {
-    //     alert(response);
-    //    },
-    // });
-    var xhr = new XMLHttpRequest();
-    var url = './datasets/saveColumnTypes.php';
-    var data = columnTypes;
+    //$.post('/import', columnTypes, function(response) {
+      //console.log("Response: " + response);
+    //});
 
-    xhr.onreadystatechange = function() {//Call a function when the state changes.
-      if(xhr.readyState == 4 && xhr.status == 200) {
-          alert(xhr.responseText);
-      }
-    }
-
-    xhr.open('POST', url, true);
-    xhr.responseType = 'json';
-    xhr.setRequestHeader('Content-Type', 'application/json'); 
-
-    xhr.send(data);
-
-    // $.post('./dataset/saveColumnTypes.php', columnTypes, function(response) {
-    //   console.log("Response: "+response);
-    // });
+    $.post('/import', columnTypes); 
   }
 }

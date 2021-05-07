@@ -2,8 +2,16 @@ const path = require('path');
 const fs = require('fs');
 const Papa = require('papaparse');
 
-async function uploadParse(uploadedFileName) {
-    const csvFilePath = path.resolve('src/public/datasets/', uploadedFileName);
+async function uploadParse(columns) {
+    //console.log(columns); 
+    //var str = JSON.stringify(columns); 
+    //console.log(str); 
+
+    for (const [key, value] of Object.entries(columns)) {
+        console.log(`${key}: ${value}`);
+    }
+
+    const csvFilePath = path.resolve('src/public/datasets/client_data.csv');
     const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1024}); 
      
     Papa.parse(fileStream, {
@@ -11,8 +19,8 @@ async function uploadParse(uploadedFileName) {
         dynamicTyping: true,
         chunk: function(results, parse) {
             //results.data is an array
-            console.log("Chunk data:", results.data); 
-            console.log("--------------Chunk end---------------"); 
+            //console.log("Chunk data:", results.data); 
+            //console.log("--------------Chunk end---------------"); 
         },
         complete: results => {
             //console.log('Complete', results.data.length, 'records.'); 
@@ -47,6 +55,18 @@ async function uploadParse(uploadedFileName) {
             //resolve(val);
         }
     }); 
+
+    //deleting the file
+    const uploadedFile = 'src/public/datasets/client_data.csv'; 
+    fs.unlink(uploadedFile, (err) => {
+        if (err) {
+          console.error(err)
+          return
+        }
+      
+        //file removed
+      })
+
 }
 
 //allows us to export the function as a module to be used by other files
