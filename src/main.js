@@ -4,14 +4,20 @@ const server = require("./server");
 
 let mainWindow;
 
+process.env.NODE_ENV = 'production';
+
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 500,
+    width: 1200,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
     },
   });
+
+  if(process.env.NODE_ENV !== 'production'){
+    mainWindow.webContents.openDevTools();
+  }
 
   mainWindow.loadURL("http://localhost:3000");
   //mainWindow.loadFile('src/public/pages/import.html');
