@@ -1,8 +1,8 @@
 const axios = require('axios');
 const btoa = require('btoa'); 
         
-const key = "c432fc78-3098-4ae5-abc8-8906f4c4aa52" /// user key from api_keys
-const token = "75bf48cb-587f-40a1-8514-8b6f66d9e690" // token from api_keys
+const key = "" /// user key from api_keys
+const token = "" // token from api_keys
 
 const auth = `Basic ${btoa(
     key + ":" + token
@@ -54,6 +54,8 @@ axios("https://api.sweepapi.com/account/auth/api_key", {
 });
 */ 
 
+
+/*
 //API request to create a directory. Returns status ok and directory id if done successfully 
 axios("https://api.sweepapi.com/directory", {
     method: 'POST',
@@ -74,7 +76,45 @@ axios("https://api.sweepapi.com/directory", {
 .catch(function (error) {
     console.log(error); 
 });  
+*/ 
 
+axios("https://api.sweepapi.com/stream/82fa0473-65ac-4062-b469-3a1452591fa7", {
+    method: 'DELETE',
+    headers: {
+        'Content-Type' : 'application/json',
+        Authorization: auth,
+    },
+})
+.then(function (response) {
+    //Return json
+    console.log(response.data);  
+})
+.catch(function (error) {
+    console.log(error); 
+});  
+
+let dirid = createDirectory("testDir");
+
+function createDirectory(dirName) { 
+    config_req = { 
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*"
+        }
+    },
+    data = {
+        "name": dirName
+    }
+    return axios.post("https://api.sweepapi.com/directory", data, config_req).then(response => {return response.data["id"]});  
+}
+
+dirid.then(function(result) {
+    console.log(result) // "Some User token"
+})
 
 //Creating a directory under a home directory
 function createSubDir(directoryID) {

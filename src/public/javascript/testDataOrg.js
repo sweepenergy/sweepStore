@@ -5,36 +5,46 @@ const Papa = require('papaparse');
 const axios = require('axios'); 
 
 function createDirectory(dirName) { 
-    //Global variables from server
-    //console.log("key: ", key); 
-    //console.log("token: ", token); 
-
     config_req = { 
         auth: {
             username: key,
             password: token
         },
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*"
         }
     },
     data = {
         "name": dirName
     }
-    axios.post("https://api.sweepapi.com/directory", data, config_req)
-    .then(function (response) {
-        console.log("directory: ", response.data);  
-        return response.data["id"]; 
-    })
-    .catch(function (error) {
-        console.log(error); 
-    }); 
+    return axios.post("https://api.sweepapi.com/directory", data, config_req).then(response => {return response.data["id"]});  
 }
 
-function getColumns(columns) {
+function createStream(directoryID, streamName, inputDataVar) {
+    config_req = {
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*"
+        }
+    }
+    data = {
+        "directory_id": directoryID,
+        "name": streamName,
+        "inputDataVar": inputDataVar
+    }
+    return axios.post("https://api.sweepapi.com/stream", data, config_req).then(response => {return response.data["stream_id"]});
+}
+
+
+function getColumns(columns) { 
     let dirID; 
-    let dirName;
-    let stream; 
+    let streamID; 
+    let stream;  
     let timestamp; 
     let ts_params = []; 
 
@@ -42,8 +52,8 @@ function getColumns(columns) {
         //console.log(`${key}: ${value}`);
 
         //Storing the names of the columns that represent these 
-        if(value == 'directory') {
-            dirName = key; 
+        if(value == 'directory') { 
+            dirID = createDirectory(key); 
         }
 
         if(value == 'stream') {
@@ -54,15 +64,35 @@ function getColumns(columns) {
             timestamp = key; 
         }
 
-        if(value == 'ts_params') {
-            ts_params.push(value); 
+        if(value == 'ts_param') {
+            ts_params.push(key); 
         }
     }
-    dirID = createDirectory(dirName);
-    uploadParse(); 
+
+    let inputDataVar = []; 
+    ts_params.forEach(function(item, index, array) {
+        inputDataVar.push({
+            "var_name": item,
+            "display_name": item,
+            "type": "number"
+        })
+    })
+
+    dirID.then(function(result) {
+        console.log("dir id ", result); 
+        streamID = createStream(result, stream, inputDataVar);
+
+        streamID.then(function(result) {
+            console.log("stream id ", result); 
+            uploadParse(result, ts_params, timestamp); 
+        })
+    })
+
 }
 
-async function uploadParse() {
+async function uploadParse(streamID, tsParams, timestampCol) {
+    console.log("up sID ", streamID);
+
     const csvFilePath = path.resolve('src/public/datasets/client_data.csv');
     const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1024}); 
      
