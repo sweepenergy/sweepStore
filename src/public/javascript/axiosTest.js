@@ -1,8 +1,8 @@
 const axios = require('axios');
 const btoa = require('btoa'); 
         
-const key = "" /// user key from api_keys
-const token = "" // token from api_keys
+const key = "c432fc78-3098-4ae5-abc8-8906f4c4aa52" /// user key from api_keys
+const token = "75bf48cb-587f-40a1-8514-8b6f66d9e690" // token from api_keys
 
 const auth = `Basic ${btoa(
     key + ":" + token
@@ -106,8 +106,7 @@ function createStream(directoryID) {
             password: token
         },
         headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            "Access-Control-Allow-Origin":"*"
+            "Content-Type": "application/json"
         }
     }
     data = {
@@ -141,6 +140,55 @@ function createStream(directoryID) {
     .then(function (response) {
         //Return json
         console.log("create stream: ", response.data); 
+
+        postStreamData(response.data["stream_id"], "voltage_b"); 
+    })
+    .catch(function (error) {
+        console.log(error); 
+    });
+}
+
+
+function postStreamData(streamID, ts_param) {
+    config_req = {
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*"
+        }
+    }, 
+    data = {
+        "timestamp" : "2021-05-06T09:00:00.000Z",
+        "sample" : "887.0"
+    }
+    axios.post("https://api.sweepapi.com/stream/"+streamID+"/ts/"+ts_param+"/dataset", data, config_req)
+    .then(function (response) {
+        console.log("added data to stream: ", response.data); 
+        verifyDataOnStream(streamID, ts_param); 
+    })
+    .catch(function (error) {
+        console.log(error); 
+    });
+}
+
+function verifyDataOnStream(streamID, ts_param) {
+    config_req = {
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*"
+        }
+    }, 
+    axios.get("https://api.sweepapi.com/stream/"+streamID+"/ts/"+ts_param+"/dataset?span=raw&time_scale=custom&range_start=2021-05-06T05:00:00.000Z&range_end=2021-05-07T04:34:07.000Z&limit=&ts_type=avg", config_req)
+    .then(function (response) {
+        console.log("data added to the stream: ", response.data); 
+         
     })
     .catch(function (error) {
         console.log(error); 

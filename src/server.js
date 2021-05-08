@@ -57,11 +57,17 @@ app.engine('html', require('ejs').renderFile);
 ==========================================================
  */
 
+//Storing key and token as global variables so they can be used in dataOrg files
+global.key;
+global.token; 
+
 app.get('/', (req,res) => {
   const sess = req.session;
   if (sess.userkey && sess.usertoken) {
       if (sess.userkey) {
           console.log(sess);
+          key = sess.userkey;
+          token = sess.usertoken; 
           res.redirect('/upload');
           //res.end('<a href=' + '/logout' + '>Click here to log out</a >')
       }
@@ -70,9 +76,13 @@ app.get('/', (req,res) => {
   }
 });
 
+
 app.post('/auth', function(req, res) {
 	var userkey = req.body.userkey;
 	var usertoken = req.body.usertoken;
+
+  key = req.body.userkey;
+  token = req.body.usertoken; 
 
   const sess = req.session;
 
@@ -130,7 +140,7 @@ app.post('/import', (req, res) => {
   //console.log("User specified column types: ", req.body);  
 
   const test = require('./public/javascript/testDataOrg');
-  test.uploadParse(req.body); 
+  test.getColumns(req.body); 
 });
 
 app.get('/organize', (req, res) => {

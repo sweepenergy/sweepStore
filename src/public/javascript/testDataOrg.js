@@ -2,15 +2,67 @@ const path = require('path');
 const fs = require('fs');
 const Papa = require('papaparse');
 
-async function uploadParse(columns) {
-    //console.log(columns); 
-    //var str = JSON.stringify(columns); 
-    //console.log(str); 
+const axios = require('axios'); 
+
+function createDirectory(dirName) { 
+    //Global variables from server
+    //console.log("key: ", key); 
+    //console.log("token: ", token); 
+
+    config_req = { 
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json"
+        }
+    },
+    data = {
+        "name": dirName
+    }
+    axios.post("https://api.sweepapi.com/directory", data, config_req)
+    .then(function (response) {
+        console.log("directory: ", response.data);  
+        return response.data["id"]; 
+    })
+    .catch(function (error) {
+        console.log(error); 
+    }); 
+}
+
+function getColumns(columns) {
+    let dirID; 
+    let dirName;
+    let stream; 
+    let timestamp; 
+    let ts_params = []; 
 
     for (const [key, value] of Object.entries(columns)) {
-        console.log(`${key}: ${value}`);
-    }
+        //console.log(`${key}: ${value}`);
 
+        //Storing the names of the columns that represent these 
+        if(value == 'directory') {
+            dirName = key; 
+        }
+
+        if(value == 'stream') {
+            stream = key; 
+        }
+
+        if(value == 'timestamp') {
+            timestamp = key; 
+        }
+
+        if(value == 'ts_params') {
+            ts_params.push(value); 
+        }
+    }
+    dirID = createDirectory(dirName);
+    uploadParse(); 
+}
+
+async function uploadParse() {
     const csvFilePath = path.resolve('src/public/datasets/client_data.csv');
     const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1024}); 
      
@@ -70,4 +122,4 @@ async function uploadParse(columns) {
 }
 
 //allows us to export the function as a module to be used by other files
-module.exports = {uploadParse};
+module.exports = {getColumns};
