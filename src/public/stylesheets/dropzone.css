@@ -2,6 +2,7 @@
 body {
   font-family: helvetica, arial, sans-serif;
   padding: 6rem;
+  background-color:  white;      /*#f8f9fa;   background color might look better than just white */
 }
 main {
   max-width: 40rem;
@@ -10,6 +11,21 @@ main {
 .dropzone {
   border: 4px dashed #183996;
   color: rgb(0, 0, 0)
+}
+
+.dropzone.dz-clickable{
+  border: 4px dashed #183996;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* .dz-default{
+  background-color: #001648;
+} */
+.dz-button{
+  background-color:#183996;
+  color:#f8f9fa;
 }
 
 
