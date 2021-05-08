@@ -164,6 +164,7 @@ input[type=text], input[type=password] {
   display: inline-block;
   border: 1px solid rgb(0, 0, 0);
   box-sizing: border-box;
+  align-items: center;
 
 }
 
@@ -177,12 +178,11 @@ input[type=submit]{
 }
 
 /* use if we want to center the login button */
-.loginButton{
+/* .loginButton{
   text-align: center;
-}
+} */
 
 .successBtn{
-  
   text-align: center;
 }
 
