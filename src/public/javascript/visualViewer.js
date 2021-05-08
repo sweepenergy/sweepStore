@@ -179,23 +179,17 @@ function setColumnTypes()
     columnTypes.streamColumn = streamName;
   }
 
-  // console.log(columnTypes);
   showFileStructure(columnTypes);
 
   //sending the list of column types to the server
   if(columnTypes) {
-    //$.post('/import', columnTypes, function(response) {
-      //console.log("Response: " + response);
-    //});
-
     $.post('/import', columnTypes); 
   }
+
+  var successBtn = "<form action=\"/import\" method=\"POST\">";
+  successBtn = successBtn + "<input type=\"submit\" name=\"success\" value=\"Import\" style=\"color: white; background-color: #001648; padding: 10px 15px; border: none; text-align: center; align-items: center;\" /></form>";
+  $(".successBtn").append(successBtn);
 }
-
-
-
-
-
 
 
 // I would like to create another button that refreshes the tree with the newest structure
