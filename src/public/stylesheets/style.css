@@ -4,6 +4,7 @@ html {
 
 body{
   background-color: white;
+  /* background-color: #f8f9fa;   might look better instead of just white */
 }
 
 *, *:before, *:after {
@@ -119,46 +120,40 @@ tr:nth-child(even) {
   background: #d4d4d4;
 }
 
-
-/* tree is used to customize the given tree, still needs better visual */
-p.tree, ul.tree, ul.tree ul{
+/* style for the tree, taken from W3schools */
+ul.fileStructure, ul.fileStructure ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
-}
+   margin: 0;
+   padding: 0;
+ } 
+ ul.fileStructure ul {
+   margin-left: 10px;
+ }
+ ul.fileStructure li {
+   margin: 0;
+   padding: 0 7px;
+   line-height: 20px;
+   color: #369;
+   font-weight: bold;
+   border-left:1px solid rgb(100,100,100);
 
-ul.tree ul{
-  margin-left: 1.0em;
-}
+ }
 
-ul.tree li{
-  margin-left:0.35em;
-  border-left:thin solid #000;
-}
+ ul.fileStructure li:before {
+    position:relative;
+    top:-0.3em;
+    height:1em;
+    width:12px;
+    color:white;
+    border-bottom:1px solid rgb(100,100,100);
+    content:"";
+    display:inline-block;
+    left:-7px;
+ }
+/*  */
 
-ul.tree li:last-child{
-  border-left: none;
-}
-
-ul.tree li:before{
-  width: 0.9em;
-  height: 0.6em;
-  margin-right: 0.1em;
-  vertical-align: top;
-  border-bottom: thin solid #000;
-  content: "";
-  display: inline-block;
-}
-
-ul.tree li-last-child:before{
-  border-left: thin solid #000;
-}
-
-
- 
 .container {
   padding: 10%;
-
 }
 
 
@@ -181,7 +176,7 @@ input[type=submit]{
   text-align: center;
 }
 
-/* use if we want the center the login button */
+/* use if we want to center the login button */
 /* .loginButton{
   text-align: center;
 } */

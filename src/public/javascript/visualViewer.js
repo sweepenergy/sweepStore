@@ -92,19 +92,6 @@ function showSweepFormat(data)
        radioBtn = radioBtn + "<input type=\"radio\" name=\"choice\" value=\"no\"> No ";
        radioBtn = radioBtn + "<input type=\"button\" id=\"btn\" value=\"Confirm\" onclick=getValueForStream()></form>";
 
-      //  radioBtn = radioBtn + "<script> const btn.onclick = function () {";
-      //  radioBtn = radioBtn + " const rbs = document.querySelectorAll('input[name=\"choice\"]');";
-      //  radioBtn = radioBtn + " let selectedValue;";
-      //  radioBtn = radioBtn + " for (const rb of rbs) { ";
-      //  radioBtn = radioBtn + "     if (rb.checked) { ";
-      //  radioBtn = radioBtn + "         selectedValue = rb.value; ";
-      //  radioBtn = radioBtn + "         break; ";
-      //  radioBtn = radioBtn + "     } ";
-      //  radioBtn = radioBtn + " } ";
-      //  radioBtn = radioBtn + " alert(selectedValue); ";
-      //  radioBtn = radioBtn + "}; ";
-      //  radioBtn = radioBtn + "</script>";
-
        $('.columnMiddle').append(radioBtn);
 
 } 
@@ -123,7 +110,7 @@ function getValueForStream(){
   //create a text box for user to add the name for the stream
   if(selectedValue == "no"){
     var textBox = "<br><p>Type the name you would like to call your stream and press confirm.</p>";
-    textBox = textBox + "<form><input id=\"streamText\" placeholder=\"stream name\">";
+    textBox = textBox + "<form><input id=\"streamText\" placeholder=\"stream name\" required>";
     textBox = textBox + "<input type=\"button\" id=\"stream-btn\" value=\"Add Stream\" onclick=\"setColumnTypes()\"></form>";
     $(".columnMiddle").append(textBox);
   }
@@ -184,10 +171,16 @@ function setColumnTypes()
   }else if(streamCount == 0){
     //get the name of the new stream from the id="streamText"
     streamName = document.getElementById("streamText").value;
+
+    if(streamName == ""){
+      alert("Please type a name for your stream.");
+      return;
+    }
     columnTypes.streamColumn = streamName;
   }
 
-  console.log(columnTypes);
+  // console.log(columnTypes);
+  showFileStructure(columnTypes);
 
   //sending the list of column types to the server
   if(columnTypes) {
@@ -197,4 +190,56 @@ function setColumnTypes()
 
     $.post('/import', columnTypes); 
   }
+}
+
+
+
+
+
+
+
+// I would like to create another button that refreshes the tree with the newest structure
+// this would allow the user to make changes as they see fit
+
+// currently we are calling the function showFilesStructure once we have set everything and confirmed that this structure is the one the user wants
+// I have called showFileStructure() from setColumnTypes() because that is where we have all the final types  
+
+
+function showFileStructure(columnTypes){
+  
+  var tree = "";
+  var streamName = "";
+  var dirName = "";
+  var ts_params = [];
+
+  // get the names for each type
+  for (x in columnTypes){
+    if(columnTypes[x] == "directory"){
+      dirName = x;
+    } else if(columnTypes[x] == "stream"){
+      streamName = x;
+    } else if(columnTypes[x] == "ts_param"){
+      ts_params.push(x);
+    } else if(x == "streamColumn"){   // this condition applies to when the user gives a name for a stream
+      streamName = columnTypes[x];
+    } 
+    // console.log("Value: " + columnTypes[x] + ", Name: " + x);
+  }
+
+  // create the tree with the received information
+  tree += '<li><span class=\"caret\">' + dirName + '</span>';
+  tree += '<ul class=\"nested\">';
+  tree += '<li><span class=\"caret\">' + streamName + '</span>';
+  tree += '<ul class=\"nested\">';
+  for(x in ts_params){
+    tree += '<li>' + ts_params[x] + '</li>';
+  }
+  tree += '</ul>';
+  tree += '</li>';
+  tree += '</ul>';
+  tree += '</li>';
+  tree += '</ul>';
+
+  $('.fileStructure').append(tree);
+
 }
