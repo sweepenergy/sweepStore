@@ -138,13 +138,22 @@ app.get('/import', (req, res) => {
 
 app.post('/import', (req, res) => { 
   //console.log("User specified column types: ", req.body);  
-
-  const test = require('./public/javascript/testDataOrg');
-  test.getColumns(req.body); 
+  if(!req.body.success) {
+    const test = require('./public/javascript/testDataOrg');
+    test.getColumns(req.body);
+  }
+  else {
+    console.log('Redirecting to the success page...');
+    res.redirect('/success');
+  }
 });
 
-app.get('/organize', (req, res) => {
-  res.render('mainWindow.html');
+app.get('/success', (req, res) => {
+  res.render('success.html');
+});
+
+app.post('/success', (req, res) => {
+  res.redirect('/upload');
 });
 
 /*app.get('/logout',function(req,res){
