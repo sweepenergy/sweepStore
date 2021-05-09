@@ -1,5 +1,6 @@
 # Sweep Store
-***PLANNED PRODUCT DESCRIPTION***
+Sweep Store is a secure realtime database import desktop app. This app is used to streamline a users experience with importing their datasets
+to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep Store features a secure one-time login, a drag and drop file upload, a visual representation of the uploaded dataset, a file structure that shows how data will be imported, and an editting tool to determine how data will be posted to Sweep API. 
 ## Dependencies
   Currently we are only using one external dependency which is a Redis server. To install redis, head over to their main page: https://redis.io/.
   Download version 6.2.3. If you are having issues downloading the aplication on windows, then you may also choose to download a microsoft port 
