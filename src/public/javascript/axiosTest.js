@@ -78,6 +78,8 @@ axios("https://api.sweepapi.com/directory", {
 });  
 */ 
 
+/*
+
 axios("https://api.sweepapi.com/stream/82fa0473-65ac-4062-b469-3a1452591fa7", {
     method: 'DELETE',
     headers: {
@@ -115,6 +117,7 @@ function createDirectory(dirName) {
 dirid.then(function(result) {
     console.log(result) // "Some User token"
 })
+*/ 
 
 //Creating a directory under a home directory
 function createSubDir(directoryID) {
@@ -214,6 +217,7 @@ function postStreamData(streamID, ts_param) {
     });
 }
 
+verifyDataOnStream("cca03f0d-a675-4e2b-b4a1-892a1f8e6d27", "AMBIENT_TEMPERATURE"); 
 function verifyDataOnStream(streamID, ts_param) {
     config_req = {
         auth: {
@@ -225,7 +229,7 @@ function verifyDataOnStream(streamID, ts_param) {
             "Access-Control-Allow-Origin":"*"
         }
     }, 
-    axios.get("https://api.sweepapi.com/stream/"+streamID+"/ts/"+ts_param+"/dataset?span=raw&time_scale=custom&range_start=2021-05-06T05:00:00.000Z&range_end=2021-05-07T04:34:07.000Z&limit=&ts_type=avg", config_req)
+    axios.get("https://api.sweepapi.com/stream/"+streamID+"/ts/"+ts_param+"/dataset?span=raw&time_scale=1y&range_start=2020-05-15T00:00:00.000Z&range_end=2020-05-18T14:15:00.000Z&limit=30&ts_type=avg", config_req)
     .then(function (response) {
         console.log("data added to the stream: ", response.data); 
          

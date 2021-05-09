@@ -90,20 +90,67 @@ function getColumns(columns) {
 
 }
 
+function postStreamData(streamID, ts_paramNames, ts_paramVals, timestampVal) {
+    config_req = {
+        auth: {
+            username: key,
+            password: token
+        },
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin":"*"
+        }
+    }
+    for(let i = 0; i < ts_paramNames.length; i++) {
+        data = {
+            "timestamp" : timestampVal,
+            "sample" : ts_paramVals[i]
+        }
+        axios.post("https://api.sweepapi.com/stream/"+streamID+"/ts/"+ts_paramNames[i]+"/dataset", data, config_req)
+        .then(function (response) {
+            console.log("added data to stream: ", response.data); 
+            //verifyDataOnStream(streamID, ts_param); 
+        })
+        .catch(function (error) {
+            console.log(error); 
+        });
+    }
+}
+
 async function uploadParse(streamID, tsParams, timestampCol) {
-    console.log("up sID ", streamID);
 
     const csvFilePath = path.resolve('src/public/datasets/client_data.csv');
     const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1024}); 
-     
+    
+    let timestampVal; 
+    let tsParamVals = []; 
+    let tsParamNames = [];
+
     Papa.parse(fileStream, {
         header: true,
         dynamicTyping: true,
-        chunk: function(results, parse) {
-            //results.data is an array
-            //console.log("Chunk data:", results.data); 
-            //console.log("--------------Chunk end---------------"); 
-        },
+        step: function(results) {
+            //console.log(results.data);
+ 
+            for (const [keyVal, value] of Object.entries(results.data)) {
+                if(keyVal == timestampCol) {
+                    timestampVal = value; 
+                }
+                else if(tsParams.includes(keyVal)) {
+                    tsParamVals.push(value); 
+                    tsParamNames.push(keyVal); 
+                }
+            }
+
+            /* console.log("row: ", rownum); 
+            for(let i = 0; i < tsParamNames.length; i++) {
+                console.log("tsparam: ", tsParamNames[i], "value: ", tsParamVals[i]); 
+            }  */
+
+            postStreamData(streamID, tsParamNames, tsParamVals, timestampVal)
+            tsParamVals = [];
+            tsParamNames = []; 
+        }, 
         complete: results => {
             //console.log('Complete', results.data.length, 'records.'); 
 
@@ -150,6 +197,63 @@ async function uploadParse(streamID, tsParams, timestampCol) {
       })
 
 }
+
+async function parseTest() {
+    const csvFilePath = path.resolve('src/public/datasets/test.csv');
+    const fileStream = fs.createReadStream(csvFilePath, {highWaterMark: 1024}); 
+
+    Papa.parse(fileStream, {
+        header: true,
+        dynamicTyping: true,
+        step: function(results) {
+            //console.log(results.data);
+
+            let timestampVal; 
+            let tsParamVal; 
+            let tsParamName; 
+            for (const [keyVal, value] of Object.entries(results.data)) {
+                timestampVal = " "; 
+                tsParamVal = " "; 
+
+                if(keyVal == timestampCol) {
+                    timestampVal = value; 
+                }
+                else if(ts.includes(keyVal)) {
+                    tsParamVal = value; 
+                    tsParamName = keyVal; 
+                }
+
+                //Check that both have been filled. Some columns could be 'not applicable' 
+                if(timestampVal != " " && tsParamVal != " ") {
+                    //postStreamData(streamID, tsParamName, tsParamVal, timestampVal)
+                }
+                //console.log(`${keyVal}: ${value}`);
+            } 
+        }, 
+        /*
+        chunk: function(results, parse) {
+
+            for (let i = 0; i < results.data.length; i++) {
+                for (const [keyVal, value] of Object.entries(results.data[i])) {
+                    if(ts.includes(keyVal)) {
+
+                    }
+                    console.log(`${keyVal}: ${value}`);
+                }
+            }
+
+            //results.data is an array of json objects 
+            //console.log("Chunk data:", results.data[0]); 
+            console.log("--------------Chunk end---------------"); 
+        },
+        */ 
+        complete: results => {
+            
+        }
+    }); 
+}
+
+//parseTest(); 
 
 //allows us to export the function as a module to be used by other files
 module.exports = {getColumns};
