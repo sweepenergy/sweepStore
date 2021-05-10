@@ -25,8 +25,9 @@ to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep St
 4.After the installation is completed, you can simply run the app  with ***npm start***. You can also test individual JavaScript files by moving to the correct directory and the use the command ***node <file>.js***.
 ## Details
 ### Secure One-time Login:
-  The login functionality utilizes Express-session and a Redis server. When the app is initially loaded, the user is prompted to login via their API key and API token.
-  ***CONTINUE...***
+  The login functionality utilizes Express-session and a Redis server. When the app is initially loaded, the user is prompted to login via their API key and API 
+  token. The login information is sent to the Redis server to be stored. The information is also remembered using Express-session. The following time user opens the
+  app, we check for session variables and if they do then the user is automatically logged in with the correct API key and API token.
 ### DropzoneJS:
   DropzoneJS is a JavaScript library that allows us to implement a drag and drop file upload form. This was paired with multer to save the upload file to 
   the local file system, under "./src/public/datasets". The file is also given a name of "client_data.csv". By saving the file to the loval system, this 
