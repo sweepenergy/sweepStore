@@ -27,3 +27,25 @@ to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep St
 ### Secure One-time Login:
   The login functionality utilizes Express-session and a Redis server. When the app is initially loaded, the user is prompted to login via their API key and API token.
   ***CONTINUE...***
+### DropzoneJS:
+  DropzoneJS is a javascript library that allows us to implement a drag and drop file upload form. This was paired with multer to save the upload file to 
+  the local file system, under "./src/public/datasets". The file is also given a name of "client_data.csv". By saving the file to the loval system, this 
+  allows to automatically generate the visual viewer when we transition to that page. In addition, this allows us to parse the data in "testDataOrg.js" by 
+  providing a link to the location of the dataset. 
+### Visual Viewer:
+  Here the visual viewer is used display the uploaded dataset onto the page. In addition, on this same page the user can decided on how they want to import their
+  data. They select each column to either be a directory, stream, timestamp, or ts_param. However, there may only ever be one directory, one stream, 
+  one timestamp, and as many ts_params as they want associated to a stream. If the user doesn't choose a stream, they will be prompted to enter a stream. 
+  After the user has selected and confirmed their edits, a file structure tree is also displayed. An object describing the entries as (key,value) pairs is created 
+  an passed to the Express server to be utilized by our parser.
+
+  The limitation here is that file structure tree is not generated automatically. Ideally as the user selects column types, the tree will begin generating. 
+  But, currently the tree only generate after they select "confirm".
+### Data parsing and Importation:
+  The column types object is passed to the "getColumns()" function of "testDataOrg.js". This begins the parsing of data using Papa-parse as well importation. 
+  First, we create our directory then our stream. Once that is completed we parse the data and compare the column value of a data cell to the (key,value) pair 
+  of our column type object. If its a timestamp, we post to the correct stream. If it is a ts_param, then store it in an array of ts_params. Once all ts_params 
+  are found we make a post request to the Sweep API including the ts_param array.
+  
+  The limitation that we have found so far is that the program struggles to import correctly when the csv file has more then 3000 rows.
+  
