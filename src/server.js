@@ -12,7 +12,7 @@ var client = require('redis').createClient();
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './src/public/datasets')
+    cb(null, path.join(__dirname, './public/datasets'))
   },
   filename: function (req, file, cb) {
     cb(null, 'client_data.csv');
