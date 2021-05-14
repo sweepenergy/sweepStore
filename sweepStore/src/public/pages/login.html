@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>Login</title>
+    <link rel="shortcut icon" href="#"> <!-- Temporary solution to favicon.ico error -->
+
+</head>
+<body>
+
+    <link rel="stylesheet" href="../stylesheets/style.css">
+
+
+    <div class="banner" id="loginBanner">
+        <a>SweepStore</a>
+    </div>
+
+
+  <div class="container">
+    <div class="row">
+      <form action="/auth" method="POST">
+        <div class="LoginForm">
+            API Key<br>
+            <input type="text" placeholder="Key" name="userkey" required>
+            <br>API Token<br>
+            <input type="password" placeholder="Token" name="usertoken" required>
+            <div class="loginButton">
+              <input type="submit" value="LOGIN" title="Login">
+            </div>  
+            
+
+            <!--<input id="login-btn" action="/" type="submit" class="button" value="Login"-->
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+
+</body>
+
+</html>
