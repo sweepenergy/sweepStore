@@ -11,7 +11,7 @@ to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep St
 ### via Package:
   The project has been packaged using Github's their local npm registry. Currently, to properly run the server you will need to do the following:
   1. Start up your Redis server. To do so navigate to your Redis directory, which you downloaded, and execute the "redis-server" file.
-  2. The project can be ran using ***npm start***
+  2. The project can be ran using the provided executible.
   
 ### From Source:
 1. Clone the repository or download as a zip file
