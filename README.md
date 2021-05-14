@@ -42,6 +42,7 @@ to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep St
 
   The limitation here is that file structure tree is not generated automatically. Ideally as the user selects column types, the tree will begin generating. 
   But currently the tree only generates after they select "confirm".
+  
 ### Data parsing and Importation:
   The column types object is passed to the "getColumns()" function of "testDataOrg.js". This begins the parsing of data using Papa-parse as well importation. 
   First, we create our directory then our stream. Once that is completed we parse the data and compare the column value of a data cell to the (key,value) pair 
@@ -50,3 +51,15 @@ to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep St
   
   The limitation that we have found so far is that the program struggles to import correctly when the csv file has more than 3000 rows.
   
+## Future Implementation
+### Secure One-time Login:
+  - The entire project may be packaged within a docker container, containing our Redis server and the our source. This is so that the user will not need to
+  individually boot the Redis server, then the program. With docker, they can both be started with a single command. 
+  
+### Visual Viewer:
+  - When selecting a ts_param, we would like the user to be able to select the unit type of data. This may be integer values, names, float values, etc.
+  - In addition, a progress bar would like to be added to indicate how far a long the import process is. When the progress bar completely filled, meaning
+  the importation was successful, then the user will be rerouted to the success page.
+  
+### Data parsing: 
+  - Ideally the project will be able to handle multiple differing file types such as: excel, Mysql, PostgresDB, etc.
