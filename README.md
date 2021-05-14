@@ -9,22 +9,15 @@ to Sweep Energy's cloud-based data gathering platform called Sweep API. Sweep St
   
 ## Installation
 ### via Package:
-
-   We tried packaging the project using electron forge, but currently this is not working correctly do to how we input our file paths throughout the code.
-   The following is an example from the server.js 
-   file of where the links fail.
-   
-   
-    var storage = multer.diskStorage({
-      destination: function (req, file, cb) {
-      cb(null, './src/public/datasets')
-    },
+  The project has been packaged using Github's their local npm registry. Currently, to properly run the server you will need to do the following:
+  1. Start up your Redis server. To do so navigate to your Redis directory, which you downloaded, and execute the "redis-server" file.
+  2. The project can be ran using ***npm start***
   
 ### From Source:
 1. Clone the repository or download as a zip file
 2. Install the dependencies using ***npm i***
 3. Start up your Redis server. To do so navigate to your Redis directory, which you downloaded, and execute the "redis-server" file.
-4.After the installation is completed, you can simply run the app  with ***npm start***. You can also test individual JavaScript files by moving to the correct directory and the use the command ***node <file>.js***.
+4. After the installation is completed, you can simply run the app  with ***npm start***. You can also test individual JavaScript files by moving to the correct directory and the use the command ***node <file>.js***.
 
 ## Details
 ### Secure One-time Login:
